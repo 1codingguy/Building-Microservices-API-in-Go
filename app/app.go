@@ -16,8 +16,9 @@ func Start() {
 
 	// wiring
 	// service.NewService() - service refers to the package, not Service struct
-	// CustomerRepositoryStub implements CustomerRepository interface since it has a FindAll() 
-	ch := CustomerHandlers{service: service.NewService(domain.NewCustomerRepositoryStub())}
+	// CustomerRepositoryStub implements CustomerRepository interface since it has a FindAll()
+	// ch := CustomerHandlers{service: service.NewService(domain.NewCustomerRepositoryStub())}
+	ch := CustomerHandlers{service: service.NewService(domain.NewCustomerRepositoryDb())}
 
 	// function to register route
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
