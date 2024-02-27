@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/1codingguy/go-microservice-api/banking/service"
 	"github.com/gorilla/mux"
 )
 
@@ -15,25 +16,14 @@ type Customer struct {
 	ZipCode string `json:"zip_code" xml:"zipCode"`
 }
 
-func greet(w http.ResponseWriter, r *http.Request) {
-	// send the response back to the client
-	// Fprintf takes the "hello world" string, write it to w
-	fmt.Fprint(w, "hello world")
+type CustomerHandlers struct {
+	// service is a type that has a GetAllCustomer() method
+	service service.CustomerService
 }
 
-func getAllCustomers(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{
-		{
-			Name:    "John",
-			City:    "Phuket",
-			ZipCode: "83000",
-		},
-		{
-			Name:    "Peter",
-			City:    "Bangkok",
-			ZipCode: "10000",
-		},
-	}
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+
+	customers, _ := ch.service.GetAllCustomer()
 
 	if r.Header.Get("Content-Type") == "application/xml" {
 		w.Header().Add("Content-Type", "application/xml")
@@ -45,7 +35,7 @@ func getAllCustomers(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func getCustomer(w http.ResponseWriter, r *http.Request){
+func getCustomer(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	fmt.Fprint(w, vars["customer_id"])
 }

@@ -7,16 +7,23 @@ type CustomerService interface {
 }
 
 // service implementation
-type DefaultCustomerService struct {
-	// repo can hold anything that implements the CustomerRepository interface
+// "implementing" an interface in Go means that a type (like a struct) has all the methods that the interface describes.
+
+type Service struct {
+	// Whatever repo ends up being, it must know how to FindAll customers.
 	repo domain.CustomerRepository
 }
 
-func (s DefaultCustomerService) GetAllCustomer() ([]domain.Customer, error) {
+func (s Service) GetAllCustomer() ([]domain.Customer, error) {
+	// This bit has nothing to do with CustomerRepositoryInterface.
+	// GetAllCustomer() is just a wrapper to call FindAll() in repo
 	return s.repo.FindAll()
 }
 
-// helper func to instantiate DefaultCustomerService
-func NewCustomerService(repo domain.CustomerRepository) DefaultCustomerService {
-	return DefaultCustomerService{repo}
+// helper func to instantiate Service
+func NewService(repo domain.CustomerRepository) Service {
+	// This function takes a repo, and create a Service struct with it.
+	// It means injecting a repo and creating a new struct.
+	// That is why "Service uses an instance of CustomerRepositoryInterface"
+	return Service{repo}
 }
