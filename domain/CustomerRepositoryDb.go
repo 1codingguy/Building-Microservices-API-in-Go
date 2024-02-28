@@ -24,7 +24,7 @@ func (d CustomerRepositoryDb) ById(id string) (*Customer, error) {
 		return nil, err
 	}
 
-	return c, nil
+	return &c, nil
 }
 
 func (d CustomerRepositoryDb) FindAll() ([]Customer, error) {

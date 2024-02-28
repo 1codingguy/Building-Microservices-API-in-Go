@@ -4,6 +4,7 @@ import "github.com/1codingguy/go-microservice-api/banking/domain"
 
 type CustomerService interface {
 	GetAllCustomer() ([]domain.Customer, error)
+	GetCustomer(id string) (*domain.Customer, error)
 }
 
 // service implementation
@@ -18,6 +19,10 @@ func (s Service) GetAllCustomer() ([]domain.Customer, error) {
 	// This bit has nothing to do with CustomerRepositoryInterface.
 	// GetAllCustomer() is just a wrapper to call FindAll() in repo
 	return s.repo.FindAll()
+}
+
+func (s Service) GetCustomer(id string) (*domain.Customer, error) {
+	return s.repo.ById(id)
 }
 
 // helper func to instantiate Service

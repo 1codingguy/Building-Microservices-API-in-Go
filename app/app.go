@@ -22,6 +22,7 @@ func Start() {
 
 	// function to register route
 	router.HandleFunc("/customers", ch.getAllCustomers).Methods(http.MethodGet)
+	router.HandleFunc("/customers/{customer_id:[0-9]+}", ch.getCustomer).Methods(http.MethodGet)
 
 	// function to start server
 	// nil because relying on the default multiplexer instead of creating one our own

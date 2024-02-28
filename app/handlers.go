@@ -21,8 +21,28 @@ type CustomerHandlers struct {
 	service service.CustomerService
 }
 
-func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
+func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["customer_id"]
 
+	// // if can't parse the id, return 404 error
+	// if id == "" {
+	// 	// http.StatusNotFound
+	// 	// return
+	// }
+
+	customer, err := ch.service.GetCustomer(id)
+
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		fmt.Fprintf(w, err.Error())
+	} else {
+		w.Header().Add("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(customer)
+	}
+
+}
+
+func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
 	customers, _ := ch.service.GetAllCustomer()
 
 	if r.Header.Get("Content-Type") == "application/xml" {
