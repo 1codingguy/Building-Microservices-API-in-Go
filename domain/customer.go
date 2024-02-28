@@ -20,4 +20,5 @@ type Customer struct {
 type CustomerRepository interface {
 	// "repository" is more specific to data storage and retrieval abstractions
 	FindAll() ([]Customer, error)
+	ById(string) (*Customer, error) // a pointer: able to use nil pointer if a customer doesn't exist
 }
