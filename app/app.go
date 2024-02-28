@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/1codingguy/go-microservice-api/banking/domain"
-	"github.com/1codingguy/go-microservice-api/banking/service"
+	"banking/domain"
+	"banking/service"
 	"github.com/gorilla/mux"
 )
 

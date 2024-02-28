@@ -1,6 +1,6 @@
 package main
 
-import "github.com/1codingguy/go-microservice-api/banking/app"
+import "banking/app"
 
 func main() {
 	app.Start()

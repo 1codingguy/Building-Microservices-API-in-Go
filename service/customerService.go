@@ -1,6 +1,6 @@
 package service
 
-import "github.com/1codingguy/go-microservice-api/banking/domain"
+import "banking/domain"
 
 type CustomerService interface {
 	GetAllCustomer() ([]domain.Customer, error)

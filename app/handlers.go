@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/1codingguy/go-microservice-api/banking/service"
+	"banking/service"
 	"github.com/gorilla/mux"
 )
 
