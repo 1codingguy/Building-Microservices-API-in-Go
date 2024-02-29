@@ -6,7 +6,7 @@ import (
 )
 
 type CustomerService interface {
-	GetAllCustomer() ([]domain.Customer, error)
+	GetAllCustomer() ([]domain.Customer, *errs.AppError)
 	GetCustomer(id string) (*domain.Customer, *errs.AppError)
 }
 
@@ -18,7 +18,7 @@ type Service struct {
 	repo domain.CustomerRepository
 }
 
-func (s Service) GetAllCustomer() ([]domain.Customer, error) {
+func (s Service) GetAllCustomer() ([]domain.Customer, *errs.AppError) {
 	// This bit has nothing to do with CustomerRepositoryInterface.
 	// GetAllCustomer() is just a wrapper to call FindAll() in repo
 	return s.repo.FindAll()
