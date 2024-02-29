@@ -1,5 +1,7 @@
 package domain
 
+import "banking/errs"
+
 //  "domain" refers to the business domain or the problem space that the software is addressing
 
 // business logic - what is a customer
@@ -20,5 +22,5 @@ type Customer struct {
 type CustomerRepository interface {
 	// "repository" is more specific to data storage and retrieval abstractions
 	FindAll() ([]Customer, error)
-	ById(string) (*Customer, error) // a pointer: able to use nil pointer if a customer doesn't exist
+	ById(string) (*Customer, *errs.AppError) // a pointer: able to use nil pointer if a customer doesn't exist
 }

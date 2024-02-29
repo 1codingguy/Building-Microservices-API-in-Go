@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"banking/service"
+
 	"github.com/gorilla/mux"
 )
 
@@ -24,17 +25,11 @@ type CustomerHandlers struct {
 func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) {
 	id := mux.Vars(r)["customer_id"]
 
-	// // if can't parse the id, return 404 error
-	// if id == "" {
-	// 	// http.StatusNotFound
-	// 	// return
-	// }
-
 	customer, err := ch.service.GetCustomer(id)
 
 	if err != nil {
-		w.WriteHeader(http.StatusNotFound)
-		fmt.Fprintf(w, err.Error())
+		w.WriteHeader(err.Code)
+		fmt.Fprintf(w, err.Message)
 	} else {
 		w.Header().Add("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(customer)
@@ -53,9 +48,4 @@ func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Reque
 		json.NewEncoder(w).Encode(customers)
 	}
 
-}
-
-func getCustomer(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Fprint(w, vars["customer_id"])
 }

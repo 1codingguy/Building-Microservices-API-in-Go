@@ -1,8 +1,8 @@
 package domain
 
 import (
+	"banking/errs"
 	"database/sql"
-	"errors"
 	"log"
 	"time"
 
@@ -13,7 +13,7 @@ type CustomerRepositoryDb struct {
 	client *sql.DB
 }
 
-func (d CustomerRepositoryDb) ById(id string) (*Customer, error) {
+func (d CustomerRepositoryDb) ById(id string) (*Customer, *errs.AppError) {
 	customerSql := "select customer_id, name, city, zipcode, date_of_birth, status from customers where customer_id = ?"
 	row := d.client.QueryRow(customerSql, id)
 
@@ -23,10 +23,10 @@ func (d CustomerRepositoryDb) ById(id string) (*Customer, error) {
 	if err != nil {
 
 		if err == sql.ErrNoRows {
-			return nil, errors.New("Customer not found")
+			return nil, errs.NewNotFoundError("Customer not found")
 		} else {
 			log.Println("Error while scanning customers" + err.Error())
-			return nil, err
+			return nil, errs.NewUnexpectedError("Unexpected Database Error")
 		}
 	}
 
