@@ -3,19 +3,12 @@ package app
 import (
 	"encoding/json"
 	"encoding/xml"
-	"fmt"
 	"net/http"
 
 	"banking/service"
 
 	"github.com/gorilla/mux"
 )
-
-type Customer struct {
-	Name    string `json:"full_name" xml:"name"`
-	City    string `json:"city" xml:"city"`
-	ZipCode string `json:"zip_code" xml:"zipCode"`
-}
 
 type CustomerHandlers struct {
 	// service is a type that has a GetAllCustomer() method
@@ -28,13 +21,18 @@ func (ch *CustomerHandlers) getCustomer(w http.ResponseWriter, r *http.Request) 
 	customer, err := ch.service.GetCustomer(id)
 
 	if err != nil {
-		w.WriteHeader(err.Code)
-		fmt.Fprintf(w, err.Message)
+		writeResponse(w, err.Code, err.AsMessage())
 	} else {
-		w.Header().Add("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(customer)
+		writeResponse(w, http.StatusOK, customer)
 	}
+}
 
+func writeResponse(w http.ResponseWriter, code int, data any) {
+	w.Header().Add("Content-Type", "application/json") // must be first
+	w.WriteHeader(code)                                // must be before sending the json
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		panic(err)
+	}
 }
 
 func (ch *CustomerHandlers) getAllCustomers(w http.ResponseWriter, r *http.Request) {
