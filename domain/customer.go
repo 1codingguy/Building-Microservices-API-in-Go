@@ -21,6 +21,6 @@ type Customer struct {
 // How business logic (Customer) interacts with backend
 type CustomerRepository interface {
 	// "repository" is more specific to data storage and retrieval abstractions
-	FindAll() ([]Customer, *errs.AppError)
+	FindAll(status string) ([]Customer, *errs.AppError)
 	ById(string) (*Customer, *errs.AppError) // a pointer: able to use nil pointer if a customer doesn't exist
 }
