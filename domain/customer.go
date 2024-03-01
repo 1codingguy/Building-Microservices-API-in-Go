@@ -7,12 +7,12 @@ import "banking/errs"
 // business logic - what is a customer
 // Customer is the domain modal/ entity here
 type Customer struct {
-	Id          string `json:"id" xml:"id"`
-	Name        string `json:"name" xml:"name"`
-	City        string `json:"city" xml:"city"`
-	ZipCode     string `json:"zip_code" xml:"zipCode"`
-	DateOfBirth string `json:"date_of_birth" xml:"dateOfBirth"`
-	Status      string `json:"status" xml:"status"`
+	Id          string `db:"customer_id"`
+	Name        string
+	City        string
+	ZipCode     string
+	DateOfBirth string `db:"date_of_birth"`
+	Status      string
 }
 
 // Defining a port - an interface that define the expected interactions with external actors (like a web client, a file system, or a database)
