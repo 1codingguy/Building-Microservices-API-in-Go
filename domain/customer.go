@@ -1,6 +1,9 @@
 package domain
 
-import "banking/errs"
+import (
+	"banking/dto"
+	"banking/errs"
+)
 
 //  "domain" refers to the business domain or the problem space that the software is addressing
 
@@ -13,6 +16,28 @@ type Customer struct {
 	ZipCode     string
 	DateOfBirth string `db:"date_of_birth"`
 	Status      string
+}
+
+func (c Customer) GetStatusAsText() string {
+	statusAsText := "active"
+
+	if c.Status == "0" {
+		statusAsText = "inactive"
+	}
+
+	return statusAsText
+}
+
+func (c Customer) ToDto() dto.CustomerResponse {
+
+	return dto.CustomerResponse{
+		Id:          c.Id,
+		Name:        c.Name,
+		City:        c.City,
+		ZipCode:     c.ZipCode,
+		DateOfBirth: c.DateOfBirth,
+		Status:      c.GetStatusAsText(),
+	}
 }
 
 // Defining a port - an interface that define the expected interactions with external actors (like a web client, a file system, or a database)
