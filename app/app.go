@@ -1,15 +1,26 @@
 package app
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"banking/domain"
 	"banking/service"
+
 	"github.com/gorilla/mux"
+
+	"github.com/joho/godotenv"
 )
 
 func Start() {
+
+	// Load .env
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	// create our own multiplexer
 	router := mux.NewRouter()
@@ -26,5 +37,9 @@ func Start() {
 
 	// function to start server
 	// nil because relying on the default multiplexer instead of creating one our own
-	log.Fatal(http.ListenAndServe("localhost:9000", router))
+
+	server := os.Getenv("SERVER_ADDRESS")
+	port := os.Getenv("SERVER_PORT")
+
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("%s:%s", server, port), router))
 }

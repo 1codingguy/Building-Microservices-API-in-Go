@@ -7,7 +7,7 @@ import (
 )
 
 type CustomerService interface {
-	GetAllCustomer(status string) ([]domain.Customer, *errs.AppError)
+	GetAllCustomer(status string) ([]*dto.CustomerResponse, *errs.AppError)
 	GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError)
 }
 
@@ -19,19 +19,24 @@ type Service struct {
 	repo domain.CustomerRepository
 }
 
-func (s Service) GetAllCustomer(status string) ([]domain.Customer, *errs.AppError) {
+func (s Service) GetAllCustomer(status string) ([]*dto.CustomerResponse, *errs.AppError) {
 	// This bit has nothing to do with CustomerRepositoryInterface.
 	// GetAllCustomer() is just a wrapper to call FindAll() in repo
 
 	// Service layer should be responsible translating the status into code for sql query
-	if status == "inactive" {
-		status = "0"
-	} else if status == "active" {
-		status = "1"
-	} else {
-		status = ""
+
+	c, err := s.repo.FindAll(status)
+	if err != nil {
+		return nil, err
 	}
-	return s.repo.FindAll(status)
+
+	var response []*dto.CustomerResponse
+
+	for _, customer := range c {
+		r := customer.ToDto()
+		response = append(response, &r)
+	}
+	return response, nil
 }
 
 func (s Service) GetCustomer(id string) (*dto.CustomerResponse, *errs.AppError) {
